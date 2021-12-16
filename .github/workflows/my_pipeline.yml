@@ -40,7 +40,9 @@ jobs:
           chmod 600 ~/.ssh/ta-lab-key.pem
 
       - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
-        run: echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
+        run: |
+          echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
+          cat /etc/ansible/ansible.cfg
         continue-on-error: true
 
       - name: Start creating the inventory.hosts file
