@@ -94,7 +94,7 @@ jobs:
 
       - name: Run playbook to configure nginx 
         id: run_playbook
-        run: ansible-playbook ../Ansible/playbook.yml 
+        run: ansible-playbook ./Ansible/playbook.yml 
         continue-on-error: true
 
       # - name: Destroy
