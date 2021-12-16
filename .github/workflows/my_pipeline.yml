@@ -50,6 +50,7 @@ jobs:
       
       - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
         run: |
+          sudo mkdir /etc/ansible
           sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
           sudo cat /etc/ansible/ansible.cfg
         continue-on-error: true
