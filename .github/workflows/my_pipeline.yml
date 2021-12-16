@@ -41,8 +41,11 @@ jobs:
 
       - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
         run: |
-          echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
-          cat /etc/ansible/ansible.cfg
+          mkdir /etc/ansible
+          cd /etc/ansible
+          touch ansible.cfg
+          echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > ansible.cfg
+          cat ansible.cfg
         continue-on-error: true
 
       - name: Start creating the inventory.hosts file
