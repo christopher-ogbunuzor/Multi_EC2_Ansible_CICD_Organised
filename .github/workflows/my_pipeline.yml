@@ -48,11 +48,11 @@ jobs:
       #     sudo cat ansible.cfg
       #   continue-on-error: true
       
-      - name: Echo /Ansible/ansible.cfg to home directory 
-        run: |
-          sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > ~/.ansible.cfg
-          sudo cat ~/.ansible.cfg
-        continue-on-error: true
+      # - name: Echo /Ansible/ansible.cfg to home directory 
+      #   run: |
+      #     sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > ~/.ansible.cfg
+      #     sudo cat ~/.ansible.cfg
+      #   continue-on-error: true
 
       - name: Start creating the inventory.hosts file
         id: start_create
@@ -113,7 +113,7 @@ jobs:
 
       - name: Run playbook to configure nginx 
         id: run_playbook
-        run: ansible-playbook ./Ansible/playbook.yml 
+        run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
         continue-on-error: true
 
       # - name: Destroy
