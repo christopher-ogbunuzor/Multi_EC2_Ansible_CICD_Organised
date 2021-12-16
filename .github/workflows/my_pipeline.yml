@@ -39,12 +39,18 @@ jobs:
           echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/ta-lab-key.pem
           chmod 600 ~/.ssh/ta-lab-key.pem
 
+      # - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
+      #   run: |
+      #     sudo mkdir /etc/ansible
+      #     sudo cd /etc/ansible
+      #     sudo touch ansible.cfg
+      #     sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
+      #     sudo cat ansible.cfg
+      #   continue-on-error: true
+      
       - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
         run: |
-          sudo mkdir /etc/ansible
-          sudo cd /etc/ansible
-          sudo touch ansible.cfg
-          sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > ansible.cfg
+          sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
           sudo cat ansible.cfg
         continue-on-error: true
 
