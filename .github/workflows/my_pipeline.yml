@@ -39,21 +39,7 @@ jobs:
           echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/ta-lab-key.pem
           chmod 600 ~/.ssh/ta-lab-key.pem
 
-      # - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
-      #   run: |
-      #     sudo mkdir /etc/ansible
-      #     sudo cd /etc/ansible
-      #     sudo touch ansible.cfg
-      #     sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
-      #     sudo cat ansible.cfg
-      #   continue-on-error: true
-      
-      # - name: Echo /Ansible/ansible.cfg to home directory 
-      #   run: |
-      #     sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > ~/.ansible.cfg
-      #     sudo cat ~/.ansible.cfg
-      #   continue-on-error: true
-
+  
       - name: Start creating the inventory.hosts file
         id: start_create
         run: |
@@ -105,18 +91,14 @@ jobs:
           ssh-keyscan -t ecdsa,ed25519 -H $(cat ~/inventory3.hosts) >> ~/.ssh/known_hosts
             
         continue-on-error: true
-          
-      # - name: Set ANSIBLE_CONFIG env variable 
-      #   id: ANSIBLE_CONFIG
-      #   run: ANSIBLE_CONFIG=.Ansible/ansible.cfg
-      #   continue-on-error: true
+     
 
       - name: Run playbook to configure nginx 
         id: run_playbook
         run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
         continue-on-error: true
 
-      # - name: Destroy
-      #   id: destroy
-      #   run: terraform destroy --auto-approve
-      #   continue-on-error: true
+      - name: Destroy
+        id: destroy
+        run: terraform destroy --auto-approve
+        continue-on-error: true
