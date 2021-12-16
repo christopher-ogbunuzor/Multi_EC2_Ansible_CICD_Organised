@@ -48,11 +48,10 @@ jobs:
       #     sudo cat ansible.cfg
       #   continue-on-error: true
       
-      - name: Echo /Ansible/ansible.cfg to /etc/ansible/ansible.cfg 
+      - name: Echo /Ansible/ansible.cfg to home directory 
         run: |
-          sudo mkdir /etc/ansible
-          sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > /etc/ansible/ansible.cfg
-          sudo cat /etc/ansible/ansible.cfg
+          sudo echo "${{secrets.ANSIBLE_CONFIG_FILE}}" > ~/.ansible.cfg
+          sudo cat ~/.ansible.cfg
         continue-on-error: true
 
       - name: Start creating the inventory.hosts file
