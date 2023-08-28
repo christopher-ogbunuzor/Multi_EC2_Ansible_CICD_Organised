@@ -48,79 +48,84 @@ jobs:
         run: terraform apply --auto-approve
         continue-on-error: false
 
-      - name: check Ansible/Chef version
-        run: |
-          ansible --version
-          # chef --version
-        continue-on-error: true
-             
-
-      - name: Echo private key to a file
-        run: |
-          mkdir ~/.ssh
-          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/ta-lab-key.pem
-          chmod 600 ~/.ssh/ta-lab-key.pem
-
-  
-      - name: Start creating the inventory.hosts file
-        id: start_create
-        run: |
-          mkdir ~/host
-          echo "[webserver]" > ~/host/inventory.hosts        
-        continue-on-error: false
-
-
-      - name: Confirm inventory.hosts file is clean
-        id: write_output
-        run: |
-          terraform output | cut -d'"' -f 2 > ~/inventory.hosts
-          sed -n '4p' ~/inventory.hosts > ~/inventory2.hosts
-          cat ~/inventory.hosts
-          echo "separator"
-          cat ~/inventory2.hosts
-          echo "separator2"
-          cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/host/inventory.hosts
-          echo "This shld be final inventory file"
-          cat ~/host/inventory.hosts
-          
-        continue-on-error: false
-
-      - name: Build inventory.hosts file
-        id: build_inventory_file
-        run: echo "[webserver:vars]" >> ~/host/inventory.hosts 
-        continue-on-error: false
-
-      - name: Continue building inventory.hosts file 
-        id: continue_inventory_file
-        run: echo 'ansible_user = "ubuntu"' >> ~/host/inventory.hosts 
-        continue-on-error: false
-
-      - name: Continue2 building inventory.hosts file 
-        id: continue2_inventory_file
-        run: echo 'ansible_ssh_private_key_file = "~/.ssh/ta-lab-key.pem"' >> ~/host/inventory.hosts 
-        continue-on-error: false
-
-      - name: Print out inventory.hosts file 
-        id: print
-        run: cat ~/host/inventory.hosts 
-        continue-on-error: false
-  
-      
-      - name: Adding remote servers to the .ssh/known_host file 
-        id: update_known_host_file
-        run: |
-          cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/inventory3.hosts
-          ssh-keyscan -t ecdsa,ed25519 -H $(cat ~/inventory3.hosts) >> ~/.ssh/known_hosts
-            
-        continue-on-error: false
-     
-
-      - name: Run playbook to configure nginx 
-        id: run_playbook
-        run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
-        continue-on-error: false
-
       - name: Destroy
         id: destroy
         run: terraform destroy --auto-approve
         continue-on-error: false
+
+      # - name: check Ansible/Chef version
+      #   run: |
+      #     ansible --version
+      #     # chef --version
+      #   continue-on-error: true
+             
+
+      # - name: Echo private key to a file
+      #   run: |
+      #     mkdir ~/.ssh
+      #     echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/ta-lab-key.pem
+      #     chmod 600 ~/.ssh/ta-lab-key.pem
+
+  
+      # - name: Start creating the inventory.hosts file
+      #   id: start_create
+      #   run: |
+      #     mkdir ~/host
+      #     echo "[webserver]" > ~/host/inventory.hosts        
+      #   continue-on-error: false
+
+
+      # - name: Confirm inventory.hosts file is clean
+      #   id: write_output
+      #   run: |
+      #     terraform output | cut -d'"' -f 2 > ~/inventory.hosts
+      #     sed -n '4p' ~/inventory.hosts > ~/inventory2.hosts
+      #     cat ~/inventory.hosts
+      #     echo "separator"
+      #     cat ~/inventory2.hosts
+      #     echo "separator2"
+      #     cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/host/inventory.hosts
+      #     echo "This shld be final inventory file"
+      #     cat ~/host/inventory.hosts
+          
+      #   continue-on-error: false
+
+      # - name: Build inventory.hosts file
+      #   id: build_inventory_file
+      #   run: echo "[webserver:vars]" >> ~/host/inventory.hosts 
+      #   continue-on-error: false
+
+      # - name: Continue building inventory.hosts file 
+      #   id: continue_inventory_file
+      #   run: echo 'ansible_user = "ubuntu"' >> ~/host/inventory.hosts 
+      #   continue-on-error: false
+
+      # - name: Continue2 building inventory.hosts file 
+      #   id: continue2_inventory_file
+      #   run: echo 'ansible_ssh_private_key_file = "~/.ssh/ta-lab-key.pem"' >> ~/host/inventory.hosts 
+      #   continue-on-error: false
+
+      # - name: Print out inventory.hosts file 
+      #   id: print
+      #   run: cat ~/host/inventory.hosts 
+      #   continue-on-error: false
+  
+      
+      # - name: Adding remote servers to the .ssh/known_host file 
+      #   id: update_known_host_file
+      #   run: |
+      #     cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/inventory3.hosts
+      #     ssh-keyscan -t ecdsa,ed25519 -H $(cat ~/inventory3.hosts) >> ~/.ssh/known_hosts
+            
+      #   continue-on-error: false
+     
+
+      # - name: Run playbook to configure nginx 
+      #   id: run_playbook
+      #   run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
+      #   continue-on-error: false
+
+      # # - name: Destroy
+      # #   id: destroy
+      # #   run: terraform destroy --auto-approve
+      # #   continue-on-error: false
