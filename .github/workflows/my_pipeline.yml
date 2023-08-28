@@ -41,12 +41,12 @@ jobs:
       - name: Plan
         id: plan
         run: terraform plan 
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Apply
         id: apply
         run: terraform apply --auto-approve
-        continue-on-error: true
+        continue-on-error: false
      
 
       - name: Echo private key to a file
@@ -61,7 +61,7 @@ jobs:
         run: |
           mkdir ~/host
           echo "[webserver]" > ~/host/inventory.hosts        
-        continue-on-error: true
+        continue-on-error: false
 
 
       - name: Confirm inventory.hosts file is clean
@@ -77,27 +77,27 @@ jobs:
           echo "This shld be final inventory file"
           cat ~/host/inventory.hosts
           
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Build inventory.hosts file
         id: build_inventory_file
         run: echo "[webserver:vars]" >> ~/host/inventory.hosts 
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Continue building inventory.hosts file 
         id: continue_inventory_file
         run: echo 'ansible_user = "ubuntu"' >> ~/host/inventory.hosts 
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Continue2 building inventory.hosts file 
         id: continue2_inventory_file
         run: echo 'ansible_ssh_private_key_file = "~/.ssh/ta-lab-key.pem"' >> ~/host/inventory.hosts 
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Print out inventory.hosts file 
         id: print
         run: cat ~/host/inventory.hosts 
-        continue-on-error: true
+        continue-on-error: false
   
       
       - name: Adding remote servers to the .ssh/known_host file 
@@ -106,15 +106,15 @@ jobs:
           cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/inventory3.hosts
           ssh-keyscan -t ecdsa,ed25519 -H $(cat ~/inventory3.hosts) >> ~/.ssh/known_hosts
             
-        continue-on-error: true
+        continue-on-error: false
      
 
       - name: Run playbook to configure nginx 
         id: run_playbook
         run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
-        continue-on-error: true
+        continue-on-error: false
 
       # - name: Destroy
       #   id: destroy
       #   run: terraform destroy --auto-approve
-      #   continue-on-error: true
+      #   continue-on-error: false
