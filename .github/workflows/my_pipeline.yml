@@ -48,9 +48,11 @@ jobs:
         run: terraform apply --auto-approve
         continue-on-error: false
 
-      - name: check ansible version
+      - name: check Ansible/Chef version
         run: |
           ansible --version
+          chef --version
+        continue-on-error: true
              
 
       - name: Echo private key to a file
