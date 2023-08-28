@@ -1,15 +1,32 @@
 name: Talent Academy Demo
 on: [ push ]    # List on one line
+
+env:
+  # BUCKET_NAME : "<example-bucket-name>" just for example
+  AWS_REGION : "eu-west-1"
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
 jobs:
   terraform-deployment:
     runs-on: ubuntu-latest
-    steps: # The list of steps to take for executionnn
+    steps: # The list of steps to take for executionn
+
+      # - name: Authenticate with AWS
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: eu-west-1
+
       - name: Authenticate with AWS
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::708398767885:role/github_oidc
+          role-session-name: github_oidc_role_session
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Clone your code in the pipeline
         uses: actions/checkout@v2
@@ -17,7 +34,6 @@ jobs:
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v1
         
-
       - name: Init
         id: init
         run: terraform init
@@ -27,78 +43,78 @@ jobs:
         run: terraform plan 
         continue-on-error: true
 
-      - name: Apply
-        id: apply
-        run: terraform apply --auto-approve
-        continue-on-error: true
+      # - name: Apply
+      #   id: apply
+      #   run: terraform apply --auto-approve
+      #   continue-on-error: true
      
 
-      - name: Echo private key to a file
-        run: |
-          mkdir ~/.ssh
-          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/ta-lab-key.pem
-          chmod 600 ~/.ssh/ta-lab-key.pem
+      # - name: Echo private key to a file
+      #   run: |
+      #     mkdir ~/.ssh
+      #     echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/ta-lab-key.pem
+      #     chmod 600 ~/.ssh/ta-lab-key.pem
 
   
-      - name: Start creating the inventory.hosts file
-        id: start_create
-        run: |
-          mkdir ~/host
-          echo "[webserver]" > ~/host/inventory.hosts        
-        continue-on-error: true
+      # - name: Start creating the inventory.hosts file
+      #   id: start_create
+      #   run: |
+      #     mkdir ~/host
+      #     echo "[webserver]" > ~/host/inventory.hosts        
+      #   continue-on-error: true
 
 
-      - name: Confirm inventory.hosts file is clean
-        id: write_output
-        run: |
-          terraform output | cut -d'"' -f 2 > ~/inventory.hosts
-          sed -n '4p' ~/inventory.hosts > ~/inventory2.hosts
-          cat ~/inventory.hosts
-          echo "separator"
-          cat ~/inventory2.hosts
-          echo "separator2"
-          cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/host/inventory.hosts
-          echo "This shld be final inventory file"
-          cat ~/host/inventory.hosts
+      # - name: Confirm inventory.hosts file is clean
+      #   id: write_output
+      #   run: |
+      #     terraform output | cut -d'"' -f 2 > ~/inventory.hosts
+      #     sed -n '4p' ~/inventory.hosts > ~/inventory2.hosts
+      #     cat ~/inventory.hosts
+      #     echo "separator"
+      #     cat ~/inventory2.hosts
+      #     echo "separator2"
+      #     cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/host/inventory.hosts
+      #     echo "This shld be final inventory file"
+      #     cat ~/host/inventory.hosts
           
-        continue-on-error: true
+      #   continue-on-error: true
 
-      - name: Build inventory.hosts file
-        id: build_inventory_file
-        run: echo "[webserver:vars]" >> ~/host/inventory.hosts 
-        continue-on-error: true
+      # - name: Build inventory.hosts file
+      #   id: build_inventory_file
+      #   run: echo "[webserver:vars]" >> ~/host/inventory.hosts 
+      #   continue-on-error: true
 
-      - name: Continue building inventory.hosts file 
-        id: continue_inventory_file
-        run: echo 'ansible_user = "ubuntu"' >> ~/host/inventory.hosts 
-        continue-on-error: true
+      # - name: Continue building inventory.hosts file 
+      #   id: continue_inventory_file
+      #   run: echo 'ansible_user = "ubuntu"' >> ~/host/inventory.hosts 
+      #   continue-on-error: true
 
-      - name: Continue2 building inventory.hosts file 
-        id: continue2_inventory_file
-        run: echo 'ansible_ssh_private_key_file = "~/.ssh/ta-lab-key.pem"' >> ~/host/inventory.hosts 
-        continue-on-error: true
+      # - name: Continue2 building inventory.hosts file 
+      #   id: continue2_inventory_file
+      #   run: echo 'ansible_ssh_private_key_file = "~/.ssh/ta-lab-key.pem"' >> ~/host/inventory.hosts 
+      #   continue-on-error: true
 
-      - name: Print out inventory.hosts file 
-        id: print
-        run: cat ~/host/inventory.hosts 
-        continue-on-error: true
+      # - name: Print out inventory.hosts file 
+      #   id: print
+      #   run: cat ~/host/inventory.hosts 
+      #   continue-on-error: true
   
       
-      - name: Adding remote servers to the .ssh/known_host file 
-        id: update_known_host_file
-        run: |
-          cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/inventory3.hosts
-          ssh-keyscan -t ecdsa,ed25519 -H $(cat ~/inventory3.hosts) >> ~/.ssh/known_hosts
+      # - name: Adding remote servers to the .ssh/known_host file 
+      #   id: update_known_host_file
+      #   run: |
+      #     cat ~/inventory2.hosts | cut -d' ' -f1-5 | tr ' ' '\n' >> ~/inventory3.hosts
+      #     ssh-keyscan -t ecdsa,ed25519 -H $(cat ~/inventory3.hosts) >> ~/.ssh/known_hosts
             
-        continue-on-error: true
+      #   continue-on-error: true
      
 
-      - name: Run playbook to configure nginx 
-        id: run_playbook
-        run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
-        continue-on-error: true
+      # - name: Run playbook to configure nginx 
+      #   id: run_playbook
+      #   run: ansible-playbook -i ~/host/inventory.hosts ./Ansible/playbook.yml 
+      #   continue-on-error: true
 
-      - name: Destroy
-        id: destroy
-        run: terraform destroy --auto-approve
-        continue-on-error: true
+      # - name: Destroy
+      #   id: destroy
+      #   run: terraform destroy --auto-approve
+      #   continue-on-error: true
