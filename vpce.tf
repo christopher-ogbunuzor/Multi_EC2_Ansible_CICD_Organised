@@ -13,7 +13,7 @@ locals {
 }
 
 resource "aws_vpc_endpoint" "endpoints" {
-  vpc_id            = aws_vpc.vpc.id
+  vpc_id            = module.network.my_vpc_id
   for_each          = local.endpoints
   vpc_endpoint_type = "Interface"
   service_name      = "com.amazonaws.${var.region}.${each.value.name}"

@@ -52,22 +52,22 @@ resource "aws_security_group" "my_app_sg" {
   }
 }
 
-# # Security group for VPC Endpoints
-# resource "aws_security_group" "vpc_endpoint_security_group" {
-#   name_prefix = "vpc-endpoint-sg"
-#   vpc_id      = module.network.my_vpc_id
-#   description = "security group for VPC Endpoints"
+# Security group for VPC Endpoints
+resource "aws_security_group" "vpc_endpoint_security_group" {
+  name_prefix = "vpc-endpoint-sg"
+  vpc_id      = module.network.my_vpc_id
+  description = "security group for VPC Endpoints"
 
-#   # Allow inbound HTTPS traffic
-#   ingress {
-#     from_port   = 443
-#     to_port     = 443
-#     protocol    = "tcp"
-#     cidr_blocks = [var.vpc_cidr]
-#     description = "Allow HTTPS traffic from VPC"
-#   }
+  # Allow inbound HTTPS traffic
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+    description = "Allow HTTPS traffic from VPC"
+  }
 
-#   tags = {
-#     Name = "VPC Endpoint security group"
-#   }
-# }
+  tags = {
+    Name = "VPC Endpoint security group"
+  }
+}

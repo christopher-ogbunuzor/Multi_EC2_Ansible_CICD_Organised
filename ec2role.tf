@@ -33,6 +33,5 @@ resource "aws_iam_role" "ec2_ssmRole" {
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "EC2_SSM_Instance_Profile"
-
-  roles = [aws_iam_role.ec2_ssmRole.name]
+  role = aws_iam_role.ec2_ssmRole.name
 }
