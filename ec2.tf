@@ -3,9 +3,9 @@
 # EC2 - PUBLIC
 resource "aws_instance" "my_public_server" {
   count                  = 5
-  ami                    = data.aws_ami.my_aws_ami.id
+  ami                    = data.aws_ami.amazon_linux_2_ssm.id
   instance_type          = var.instance_type
-  
+
   # no need to specify keyname as we using ssm
     # key_name               = var.keypair_name
 

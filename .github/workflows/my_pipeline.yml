@@ -48,10 +48,10 @@ jobs:
         run: terraform apply --auto-approve
         continue-on-error: false
 
-      - name: Destroy
-        id: destroy
-        run: terraform destroy --auto-approve
-        continue-on-error: false
+      # - name: Destroy
+      #   id: destroy
+      #   run: terraform destroy --auto-approve
+      #   continue-on-error: false
 
       # - name: check Ansible/Chef version
       #   run: |
