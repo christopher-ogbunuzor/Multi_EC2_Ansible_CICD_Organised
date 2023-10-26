@@ -52,7 +52,7 @@ resource "aws_security_group" "my_app_sg" {
   }
 }
 
-# Security group for VPC Endpoints
+# Security group for VPC Endpoints. The vpce require https access from vpc range
 resource "aws_security_group" "vpc_endpoint_security_group" {
   name_prefix = "vpc-endpoint-sg"
   vpc_id      = module.network.my_vpc_id

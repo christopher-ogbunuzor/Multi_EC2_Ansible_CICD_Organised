@@ -47,7 +47,8 @@ variable "private_a_cidr" {
 variable "instance_type" {
   description = "The type of my first server"
   type        = string
-  default     = "t2.medium"
+  # default     = "t2.medium" 
+  default     = "t2.micro"
 }
 
 variable "keypair_name" {

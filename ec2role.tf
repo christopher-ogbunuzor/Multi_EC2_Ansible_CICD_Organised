@@ -16,6 +16,7 @@ resource "aws_iam_role" "ec2_ssmRole" {
 
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+    "arn:aws:iam::aws:policy/AmazonS3FullAccess",
    ]
   max_session_duration = "3600"
   name                 = "EC2_SSM_Role"
@@ -30,6 +31,8 @@ resource "aws_iam_role" "ec2_ssmRole" {
     
   }
 }
+
+
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "EC2_SSM_Instance_Profile"
