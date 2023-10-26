@@ -41,6 +41,45 @@ resource "aws_vpc_endpoint" "gw_endpoint" {
     }
 }
 
+# ==== YOU CAN ADD THE VPCE & S3 POLICIES BELOW
+# resource "aws_vpc_endpoint_policy" "gw_endpoint_policy" {
+#   vpc_endpoint_id = aws_vpc_endpoint.gw_endpoint.id
+#   policy = jsonencode({
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#         "Sid": "Access-to-specific-s3-only",
+#         "Principal": "*",
+#         "Action": "s3:*",
+#         "Effect": "Allow",
+#         "Resource": ["${aws_s3_bucket.work_load_bucket.arn}",
+#                     "${aws_s3_bucket.work_load_bucket.arn}/*"],
+#         }
+#     ]
+#   })
+# }
+# resource "aws_s3_bucket_policy" "allow_access_to_specific_vpce_only" {
+#   bucket = aws_s3_bucket.work_load_bucket.id
+#   policy = jsonencode({
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#         "Sid": "Access-to-specific-VPCE-only",
+#         "Principal": "*",
+#         "Action": "s3:*",
+#         "Effect": "Deny",
+#         "Resource": ["${aws_s3_bucket.work_load_bucket.arn}",
+#                     "${aws_s3_bucket.work_load_bucket.arn}/*"],
+#         "Condition": {
+#             "StringNotEquals": {
+#             "aws:SourceVpce": "${aws_vpc.vpc_end_point.id}"
+#             }
+#         }
+#     }
+#     ]
+#   })
+# }
+
 # associate route table with VPC endpoint NO LOGER NEEDED DUE TO USING INLINE LINE 36
 # resource "aws_vpc_endpoint_route_table_association" "route_table_association" {
 #   route_table_id  = module.network.private_to_public_subnet_rt_id
