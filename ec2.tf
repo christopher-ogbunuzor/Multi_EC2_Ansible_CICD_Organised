@@ -26,9 +26,9 @@ resource "aws_instance" "my_public_server" {
 # EC2 - IN PRIVATE SUBNET
 resource "aws_instance" "my_private_server" {
   count = 1
-  ami   = "ami-0f882ee54d426dce2"
+  # ami   = "ami-0f882ee54d426dce2"
 
-  # ami                    = data.aws_ami.amazon_linux_2_ssm.id
+  ami                    = data.aws_ami.amazon_linux_2_ssm.id
   instance_type = var.instance_type
 
   # no need to specify keyname as we using ssm

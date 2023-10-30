@@ -1,4 +1,4 @@
-resource "aws_cloudformation_stack" "network" {
+resource "aws_cloudformation_stack" "scheduler" {
   name         = "EC2-Scheduler-stack"
   template_url = "https://s3.amazonaws.com/solutions-reference/instance-scheduler-on-aws/latest/instance-scheduler-on-aws.template"
   capabilities = ["CAPABILITY_IAM"]
@@ -37,9 +37,9 @@ resource "aws_cloudformation_stack" "schedule" {
   capabilities = ["CAPABILITY_IAM"]
 
   parameters = {
-    ServiceInstanceScheduleServiceTokenARN = aws_cloudformation_stack.network.outputs.ServiceInstanceScheduleServiceToken
+    ServiceInstanceScheduleServiceTokenARN = aws_cloudformation_stack.scheduler.outputs.ServiceInstanceScheduleServiceToken
   }
 
-  depends_on = [ aws_cloudformation_stack.network ]
+  depends_on = [ aws_cloudformation_stack.scheduler ]
 
 }

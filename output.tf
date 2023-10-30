@@ -3,7 +3,7 @@ output "ec2_instance_ip" {
 }
 
 output "CFN_Instanc_Scheduler_Token" {
-  value = aws_cloudformation_stack.network.outputs.ServiceInstanceScheduleServiceToken
+  value = aws_cloudformation_stack.scheduler.outputs.ServiceInstanceScheduleServiceToken
 }
 
 # output "ec2_instance_ip2" {
