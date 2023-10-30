@@ -20,7 +20,7 @@ resource "aws_cloudformation_stack" "network" {
     EnableSSMMaintenanceWindows = "No"
     LogRetentionDays = "7"
     StartedTags = "InstanceScheduler-LastAction=Started By {scheduler} {year}/{month}/{day} {hour}:{minute}{timezone},"
-    StoppedTags = "InstanceScheduler-LastAction=Started By {scheduler} {year}/{month}/{day} {hour}:{minute}{timezone},"
+    StoppedTags = "InstanceScheduler-LastAction=Stopped By {scheduler} {year}/{month}/{day} {hour}:{minute}{timezone},"
     
     UsingAWSOrganizations       = "No" # If using AWS org, comment this line and 
                                        # uncomment lines 28-29, specify the account ids as principals, run the remote template in the spoke accounts
