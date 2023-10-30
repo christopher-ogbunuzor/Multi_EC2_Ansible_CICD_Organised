@@ -1,5 +1,5 @@
 # USE SSM WITH EC2
-  # https://dev.to/aws-builders/securely-access-your-ec2-instances-with-aws-systems-manager-ssm-and-vpc-endpoints-1bli
+# https://dev.to/aws-builders/securely-access-your-ec2-instances-with-aws-systems-manager-ssm-and-vpc-endpoints-1bli
 
 resource "aws_security_group" "my_app_sg" {
   name        = "my_app_sg"

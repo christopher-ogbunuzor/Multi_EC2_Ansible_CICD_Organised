@@ -14,10 +14,10 @@ locals {
 }
 
 resource "aws_vpc_endpoint" "endpoints" {
-  vpc_id            = module.network.my_vpc_id
-  for_each          = local.endpoints
-  vpc_endpoint_type = "Interface"
-  service_name      = "com.amazonaws.${var.region}.${each.value.name}"
+  vpc_id              = module.network.my_vpc_id
+  for_each            = local.endpoints
+  vpc_endpoint_type   = "Interface"
+  service_name        = "com.amazonaws.${var.region}.${each.value.name}"
   subnet_ids          = [module.network.private_subnet_a_id]
   private_dns_enabled = true
   # Add a security group to the VPC endpoint
@@ -27,18 +27,18 @@ resource "aws_vpc_endpoint" "endpoints" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = module.network.my_vpc_id
   service_name = "com.amazonaws.${var.region}.s3"
-  
+
 }
 resource "aws_vpc_endpoint" "gw_endpoint" {
-    vpc_endpoint_type = "Gateway"
-    vpc_id = module.network.my_vpc_id
-    service_name = "com.amazonaws.${var.region}.s3"
-    route_table_ids = [module.network.private_to_public_subnet_rt_id]
-    private_dns_enabled = false
+  vpc_endpoint_type   = "Gateway"
+  vpc_id              = module.network.my_vpc_id
+  service_name        = "com.amazonaws.${var.region}.s3"
+  route_table_ids     = [module.network.private_to_public_subnet_rt_id]
+  private_dns_enabled = false
 
-    tags = {
-        Name = "s3_gateway_end_point"
-    }
+  tags = {
+    Name = "s3_gateway_end_point"
+  }
 }
 
 # ==== YOU CAN ADD THE VPCE & S3 POLICIES BELOW
@@ -87,7 +87,7 @@ resource "aws_vpc_endpoint" "gw_endpoint" {
 # }
 
 # ======== NO LONGER NEEDED ===============
-  #shows how to use for_each
+#shows how to use for_each
 
 # resource "aws_vpc_endpoint_route_table_association" "privatesubnetRT_Assoc" {
 #   for_each          = local.endpoints

@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ServiceInstanceScheduleServiceTokenARN:
+    Type: String
+    Description: (Required) service token arn taken from InstanceScheduler outputs
+Metadata:
+  'AWS::CloudFormation::Designer': {}
+Resources:
+  ScheduleOnWeekdays:
+    Type: 'Custom::ServiceInstanceSchedule'
+    Properties:
+      NoStackPrefix: 'True'
+      Name: custom_schedule
+      Description: ScheduleOnWeekdays by Instance Scheduler
+      ServiceToken: !Ref ServiceInstanceScheduleServiceTokenARN
+      Timezone: Europe/London
+      Periods:
+      - Description: 8am to 8pm Mondays to Fridays
+        BeginTime: '15:40'
+        EndTime: '15:45'
+        WeekDays: mon-fri
+
+      - Description: Adhoc Schedule OnWeekends only
+        BeginTime: '8:00'
+        EndTime: '20:00'
+        MonthDays: '1-3,7-9'
+        Months: '10'
+        WeekDays: sat-sun

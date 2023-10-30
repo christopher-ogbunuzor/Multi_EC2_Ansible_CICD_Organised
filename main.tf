@@ -8,5 +8,5 @@ module "network" {
   public_a_cidr    = var.public_a_cidr
   # public_b_cidr    = var.public_b_cidr
   # public_c_cidr    = var.public_c_cidr
-  private_a_cidr   = var.private_a_cidr
+  private_a_cidr = var.private_a_cidr
 }

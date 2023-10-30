@@ -17,18 +17,18 @@ resource "aws_iam_role" "ec2_ssmRole" {
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     "arn:aws:iam::aws:policy/AmazonS3FullAccess",
-   ]
+  ]
   max_session_duration = "3600"
   name                 = "EC2_SSM_Role"
-#   path                 = "/service-role/"
+  #   path                 = "/service-role/"
 
   tags = {
-    Name   = "Chef SSM ROLE"
+    Name = "Chef SSM ROLE"
   }
 
   tags_all = {
-    Name   = "Chef SSM ROLE"
-    
+    Name = "Chef SSM ROLE"
+
   }
 }
 
